@@ -3,7 +3,8 @@ import json
 import requests
 from requests.auth import HTTPBasicAuth
 from django.conf import settings
-from account.models import User
+
+from web.models import User
 
 
 class JiveBackend(object):
@@ -20,7 +21,6 @@ class JiveBackend(object):
         except User.DoesNotExist:
             person = response.text
             person = re.sub('^throw.*;\\s*', '', person)
-            print(person)
             try:
                 person = json.loads(person)
                 email = None
@@ -43,3 +43,9 @@ class JiveBackend(object):
                 return user
             except (KeyError, ValueError):
                 return None
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None

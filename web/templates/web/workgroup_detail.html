@@ -1,0 +1,6 @@
+<p>{{ workgroup.name }}</p>
+
+{% for user in workgroup.user_set.all %}
+{{ user.last_name }}: {{ user.status }}
+{% endfor %}
+

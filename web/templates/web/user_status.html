@@ -1,0 +1,31 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    {% for status in statuses %}
+    <p>
+      <a href="javascript:void(0);" class="btn btn-block btn-lg {{ status.css_class }} status-create" data-status-id="{{ status.pk }}" data-user-id="{{ request.user.pk }}">{{ status.name }}</a>
+    </p>
+{% endfor %}
+  </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'web/js/jquery.cookie.js' %}"></script>
+<script src="{% static 'web/js/resource_rainbow/csrf.js' %}"></script>
+<script>
+  $(document).ready(function() {
+  $('.status-create').click(function() {
+  var status_id = $(this).data('status-id');
+  var user_id = $(this).data('user-id');
+  $.post("{% url 'web:status-create' %}", {
+  'status-id': status_id,
+  'user-id': user_id
+  }, function(data) {
+  console.log(data);
+  });
+  });
+  });
+</script>
+{% endblock %}

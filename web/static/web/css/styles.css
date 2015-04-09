@@ -1,0 +1,23 @@
+html, body {
+    height:100%;
+}
+body {
+    height:100%;
+}
+#wrap {
+    min-height:100%;
+    padding-top:40px;
+}
+
+#main {
+    overflow:auto;
+    padding-bottom:100px; /* This must be bigger than the footer height */
+}
+
+footer {
+    position:relative;
+    margin-top:0px;
+    clear:both;
+    background-color: #3d3f40;
+    padding: 1% 5% 1% 5%;
+}

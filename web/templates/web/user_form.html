@@ -1,0 +1,41 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'web/css/select2.css' %}">
+
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <form method="POST">
+      {% csrf_token %}
+      {% bootstrap_field form.first_name %}
+      {% bootstrap_field form.last_name %}
+      {% bootstrap_field form.email %}
+      {% bootstrap_field form.password1 %}
+      {% bootstrap_field form.password2 %}
+      {% bootstrap_field form.skills %}
+      {% buttons %}
+      <input type="submit" class="btn btn-primary" value="Save">
+      {% endbuttons %}
+    </form>
+  </div>
+</div>
+{% endblock %}
+</script>
+
+{% block javascript %}
+<script src="{% static 'web/js/select2.min.js' %}"></script>
+<script>
+  $(document).ready(function() {
+  $('#id_skills').select2({
+  placeholder: 'Enter a list of skills',
+  tags: true,
+  tokenSeparators: [',']
+  });
+  });
+</script>
+{% endblock %}
+  </body>
+</html>

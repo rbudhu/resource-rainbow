@@ -37,7 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account',
+    'haystack',
+    'taggit',
+    'bootstrap3',
     'web',
 )
 
@@ -54,7 +56,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'account.backends.JiveBackend',
+    'web.backends.JiveBackend',
     )
 
 ROOT_URLCONF = 'resource_rainbow.urls'
@@ -108,6 +110,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'web.User'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/dispatch/'
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
+
+HAYSTACK_SIGNAL_PROCESSOR = 'web.signals.UserHaystackSignalProcessor'
 
 JIVE_API_URL = 'https://prism.leidos.com/api/core/v3'
