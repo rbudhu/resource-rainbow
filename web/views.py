@@ -1,6 +1,5 @@
 from django.db import IntegrityError
-from django.forms.utils import ErrorList
-from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import (Http404, JsonResponse, HttpResponse,
                          HttpResponseRedirect)
@@ -77,7 +76,8 @@ class WorkGroupUserAdd(LoginRequiredMixin, View):
         try:
             group_pk = request.POST.get('group_id')
             user_pk = request.POST.get('user_id')
-            work_group = WorkGroup.objects.get(pk=group_pk)
+            q = Q(pk=group_pk) & Q(created_by=request.user)
+            work_group = WorkGroup.objects.get(q)
             user = User.objects.get(pk=user_pk)
             user.work_groups.add(work_group)
             response = {
@@ -134,11 +134,17 @@ class StatusCreate(LoginRequiredMixin, View):
             raise Http404
 
 
-
 class UserSearch(SearchView):
-#do get and do searchqueryset.auto_query
-    def get_context_data(self, *args, **kwargs):
-        context = super(MySearchView, self).get_context_data(*args, **kwargs)
+    def extra_context(self):
+        print(self.request)
+        context = super(UserSearch, self).extra_context()
         work_groups = WorkGroup.objects.filter(created_by=self.request.user)
         context['work_groups'] = work_groups
+        active_work_group_pk = self.request.GET.get('wg')
+        q = Q(pk=active_work_group_pk) & Q(created_by=self.request.user)
+        try:
+            active_work_group = WorkGroup.objects.get(q)
+            context['active_work_group'] = active_work_group
+        except WorkGroup.DoesNotExist:
+            pass
         return context

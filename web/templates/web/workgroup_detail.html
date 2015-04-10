@@ -1,6 +1,26 @@
-<p>{{ workgroup.name }}</p>
-
-{% for user in workgroup.user_set.all %}
-{{ user.last_name }}: {{ user.status }}
-{% endfor %}
-
+{% extends 'web/base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{ workgroup.name }}</h1>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="pull-right">
+      <a href="{% url 'web:user-search' %}?wg={{ workgroup.pk }}" class="btn btn-lg btn-success">Add Friends</a>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    {% for user in workgroup.user_set.all %}
+    <div class="col-md-4 {{ user.latest_status.status.css_class }}" style="height:150px;">
+	<h3>{{ user.first_name }} {{ user.last_name }}</h3>
+	<p>{{ user.latest_status.status.name }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

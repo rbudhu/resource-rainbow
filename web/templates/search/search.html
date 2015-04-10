@@ -1,35 +1,73 @@
-    <h2>Search</h2>
+{% extends 'web/base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h1>Search</h1>
+    </div>
+</div>
+<form method="GET">
+  <div class="row">
+    <div class="col-md-12">
+      {% bootstrap_field form.q %}
+      {% buttons %}
+      <input type="submit" class="btn btn-primary" value="Search">
+      {% endbuttons %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      {% if query %}
+      <h3>Results</h3>
+      <hr>
+      {% for result in page.object_list %}
+      <div class="col-md-4 {{ result.object.latest_status.status.css_class }}" style="height:150px;">
+	<h3>{{ result.first_name }} {{ result.last_name }}</h3>
+	<p>{{ result.object.latest_status.status.name }}</p>
+	<form id="user-form-{{ result.object.pk }}" class="form-inline" method="POST">
+	  <div class="form-group">
+	    <select name="group_id" class="form-control">
+	      {% for work_group in work_groups %}
+	      <option value="{{ work_group.pk }}">{{ work_group.name }}</option>
+	      {% endfor %}
+	    </select>
+	    <input type="hidden" name="user_id" value="{{ result.object.pk }}">
+	    <input type="button" class="btn btn-sm btn-default submit" value="Add To">
+	  </div>
+	</form>
+      </div>
+      {% empty %}
+      <p>No results found.</p>
+      {% endfor %}
+      
+      {% if page.has_previous or page.has_next %}
+      <div>
+	{% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+	|
+	{% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+      </div>
+      {% endif %}
+      {% else %}
+      {# Show some example queries to run, maybe query syntax, something else? #}
+      {% endif %}
+    </div>
+  </div>
+</form>
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'web/js/jquery.cookie.js' %}"></script>
+<script src="{% static 'web/js/resource_rainbow/csrf.js' %}"></script>
+<script>
+$(document).ready(function() {
+$('.submit').click(function() {
+var $form = $(this).closest('form');
+var data = $form.serialize();
+$.post('{% url 'web:workgroup-user-add' %}', data, function(response) {
+console.log(response);
+});
 
-    <form method="get" action=".">
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
-            </tr>
-        </table>
-
-        {% if query %}
-            <h3>Results</h3>
-
-            {% for result in page.object_list %}
-                <p>
-                    <a href="{{ result.object.first_name }}">{{ result.object.first_name }}</a>
-                </p>
-            {% empty %}
-                <p>No results found.</p>
-            {% endfor %}
-
-            {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                </div>
-            {% endif %}
-        {% else %}
-            {# Show some example queries to run, maybe query syntax, something else? #}
-        {% endif %}
-    </form>
+});
+});
+</script>
+{% endblock %}

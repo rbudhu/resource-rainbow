@@ -28,8 +28,6 @@ class UserUpdateForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
-        print('SAVING')
-        print(self.cleaned_data['skills'])
         user = super(UserUpdateForm, self).save(commit=False)
         if self.cleaned_data['password1']:
             user.set_password(self.cleaned_data['password1'])

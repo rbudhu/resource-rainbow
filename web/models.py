@@ -22,6 +22,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'password', 'first_name', 'last_name']
 
+    @property
+    def latest_status(self):
+        return UserStatus.objects.filter(user=self).latest('pk')
+
 
 class WorkGroup(models.Model):
     name = models.CharField(max_length=140)

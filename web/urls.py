@@ -5,6 +5,7 @@ from web import views
 urlpatterns = [
     url(r'^$', views.StatusCreate.as_view(),
         name='status-create'),
+    url(r'^search/?$',  views.UserSearch(), name='user-search'),
     url(r'^login/?$', login, {'template_name': 'web/login.html'},
         name='login'),
     url(r'^logout/?$', logout, {'next_page': '/login'},
@@ -20,6 +21,6 @@ urlpatterns = [
         name='workgroup-list'),
     url(r'^workgroup/(?P<pk>[0-9]+)/?$', views.WorkGroupDetail.as_view(),
         name='workgroup-detail'),
-    url(r'^workgroup/user/add/?$', views.WorkGroupDetail.as_view(),
+    url(r'^workgroup/user/add/?$', views.WorkGroupUserAdd.as_view(),
         name='workgroup-user-add'),
     ]
