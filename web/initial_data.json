@@ -1,0 +1,29 @@
+[
+ {
+     "model": "web.Status",
+	 "pk": 1,
+	 "fields": {
+	 "name": "Underworked",
+	     "priority": 1,
+	     "css_class": "btn-warning"
+	     }
+ },
+ {
+     "model": "web.Status",
+	 "pk": 2,
+	 "fields": {
+	 "name": "Just Right",
+	     "priority": 2,
+	     "css_class": "btn-success"
+	     }
+ },
+ {
+     "model": "web.Status",
+	 "pk": 3,
+	 "fields": {
+	 "name": "Overworked",
+	     "priority": 3,
+	     "css_class": "btn-danger"
+	     }
+ }
+ ]

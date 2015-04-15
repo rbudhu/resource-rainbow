@@ -9,13 +9,15 @@ from django.views.generic.edit import CreateView, UpdateView, FormView
 
 from haystack.views import SearchView
 
-from resource_rainbow.mixins import LoginRequiredMixin
+from resource_rainbow.mixins import (LoginRequiredMixin,
+                                     LoginProfileRequiredMixin)
 
+from web.mixins import WorkGroupListMixin
 from web.models import User, Status, UserStatus, WorkGroup
 from web.forms import UserCreationForm, UserUpdateForm
 
 # Create your views here.
-class UserCreate(CreateView):
+class UserCreate(WorkGroupListMixin, CreateView):
     template_name = 'web/create.html'
     form_class = UserCreationForm
     model = User
@@ -24,7 +26,7 @@ class UserCreate(CreateView):
         return reverse('web:status-create')
 
 
-class UserUpdate(LoginRequiredMixin, UpdateView):
+class UserUpdate(LoginRequiredMixin, WorkGroupListMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
 
@@ -34,6 +36,16 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
         if request.user.pk != int(pk):
             raise Http404
         return response
+
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdate, self).get_context_data(**kwargs)
+        if not self.request.user.skills.exists():
+            from random import randrange
+            adjectives = ['awesome', 'sweet', 'mad', 'rad', 'fantastic']
+            adjective = adjectives[randrange(0, 5)]
+            msg = 'You need to enter some {} skills before you can proceed.'
+            context['message'] = msg.format(adjective)
+        return context
 
     def get_success_url(self):
         return reverse('web:status-create')
@@ -58,7 +70,7 @@ class WorkGroupList(LoginRequiredMixin, ListView):
         return queryset
 
 
-class WorkGroupDetail(LoginRequiredMixin, DetailView):
+class WorkGroupDetail(LoginRequiredMixin, WorkGroupListMixin, DetailView):
     template_name = 'web/workgroup_detail.html'
     context_object_name = 'workgroup'
     
@@ -66,6 +78,28 @@ class WorkGroupDetail(LoginRequiredMixin, DetailView):
         pk = self.kwargs.get('pk')
         queryset = WorkGroup.objects.filter(pk=pk).prefetch_related('user_set')
         return queryset
+
+
+class WorkGroupUserRemove(LoginRequiredMixin, View):
+    def post(self, request):
+        response = {
+            'status': 'error'
+            }
+        try:
+            group_pk = request.POST.get('group_id')
+            user_pk = request.POST.get('user_id')
+            q = Q(pk=group_pk) & Q(created_by=request.user)
+            work_group = WorkGroup.objects.get(q)
+            user = User.objects.get(pk=user_pk)
+            user.work_groups.remove(work_group)
+            response = {
+                'status': 'success',
+                'group': work_group.pk,
+                'user': user.pk
+                }
+        except(WorkGroup.DoesNotExist, User.DoesNotExist):
+            pass
+        return JsonResponse(response)
 
 
 class WorkGroupUserAdd(LoginRequiredMixin, View):
@@ -88,9 +122,9 @@ class WorkGroupUserAdd(LoginRequiredMixin, View):
         except(WorkGroup.DoesNotExist, User.DoesNotExist):
             pass
         return JsonResponse(response)
+	  
 
-
-class WorkGroupCreate(LoginRequiredMixin, CreateView):
+class WorkGroupCreate(LoginRequiredMixin, WorkGroupListMixin, CreateView):
     template_name = 'web/workgroup_create.html'
     model = WorkGroup
     fields = ['name']
@@ -105,7 +139,7 @@ class WorkGroupCreate(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
 
 
-class StatusCreate(LoginRequiredMixin, View):
+class StatusCreate(LoginProfileRequiredMixin, View):
     template_name = 'web/user_status.html'
 
     def get(self, request):
@@ -136,7 +170,6 @@ class StatusCreate(LoginRequiredMixin, View):
 
 class UserSearch(SearchView):
     def extra_context(self):
-        print(self.request)
         context = super(UserSearch, self).extra_context()
         work_groups = WorkGroup.objects.filter(created_by=self.request.user)
         context['work_groups'] = work_groups

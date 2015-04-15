@@ -23,20 +23,36 @@ class JiveBackend(object):
             person = re.sub('^throw.*;\\s*', '', person)
             try:
                 person = json.loads(person)
-                email = None
+                print(json.dumps(person, indent=2))
+                email, location, phone_number = None, None, None
                 last_name = person['name']['familyName']
                 first_name = person['name']['givenName']
+                avatar = person['thumbnailUrl']
                 emails = person['emails']
+                addresses = person['addresses']
+                phone_numbers = person['phoneNumbers']
                 for eml in emails:
                     if eml['type'] == 'work':
                         email = eml['value']
-
+                        break
                 if email is None:
                     return None
+                for address in addresses:
+                    city = address['value']['locality']
+                    state = address['value']['region']
+                    location = '{}, {}'.format(city, state)
+                    break
+                for phone in phone_numbers:
+                    if phone['type'] == 'work':
+                        phone_number = phone['value']
+                        break
                 user = User()
                 user.last_name = last_name
                 user.first_name = first_name
                 user.email = email
+                user.phone_number = phone_number
+                user.location = location
+                user.avatar = avatar
                 user.username = username
                 user.set_password(password)
                 user.save()

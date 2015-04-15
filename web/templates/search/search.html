@@ -5,55 +5,83 @@
 <div class="row">
   <div class="col-md-12">
     <h1>Search</h1>
-    </div>
+  </div>
 </div>
-<form method="GET">
-  <div class="row">
-    <div class="col-md-12">
+<div class="row">
+  <div class="col-md-12">
+    <form method="GET">
       {% bootstrap_field form.q %}
       {% buttons %}
       <input type="submit" class="btn btn-primary" value="Search">
       {% endbuttons %}
-    </div>
+    </form>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      {% if query %}
-      <h3>Results</h3>
-      <hr>
-      {% for result in page.object_list %}
-      <div class="col-md-4 {{ result.object.latest_status.status.css_class }}" style="height:150px;">
-	<h3>{{ result.first_name }} {{ result.last_name }}</h3>
-	<p>{{ result.object.latest_status.status.name }}</p>
-	<form id="user-form-{{ result.object.pk }}" class="form-inline" method="POST">
-	  <div class="form-group">
-	    <select name="group_id" class="form-control">
+</div>
+<div class="row">
+  <div class="col-md-12">
+    {% if query %}
+    <h3>Results</h3>
+    <hr>
+    {% for result in page.object_list %}
+    <div class="col-md-4 lego grow {{ result.object.latest_status.status.css_class }}">
+      <div class="row">
+	<div class="col-md-12">
+	  <div class="row">
+	    <div class="col-md-8 col-sm-8 col-xs-8">
+	      <h3>{{ result.first_name }} {{ result.last_name }}</h3>
+	      <p>{{ result.object.latest_status.status.name }}</p>
+	    </div>
+	    <div class="col-md-4 col-sm-4 col-xs-4">
+	      <div class="avatar">
+		{% if result.object.avatar %}
+		<img src="{{ result.object.avatar }}" class="img-responsive">
+		{% else %}
+		<i class="glyphicon glyphicon-user"></i>
+		{% endif %}
+	      </div>
+	    </div>
+	  </div>
+	  <div class="small skills">
+	    Skills:
+	    {% for skill in result.object.skills.all %}
+	    <a href="{% url 'web:user-search' %}?q={{ skill.name }}" class="skill-link">{{ skill.name }}</a>
+	    {% endfor %}
+	  </div>
+	  <br>
+	  <span class="small">{% if result.object.phone_number %}{{ result.object.phone_number }} | {% endif %} {% if result.object.location %}{{ result.object.location }}{% endif %}</span>
+	</div>
+      </div>
+      <br>
+      <div class="row">
+	<div class="col-md-12">
+	  <form id="user-form-{{ result.object.pk }}" class="form-inline" method="POST">
+	    <select name="group_id" class="form-control" style="width:80%;">
 	      {% for work_group in work_groups %}
 	      <option value="{{ work_group.pk }}">{{ work_group.name }}</option>
 	      {% endfor %}
 	    </select>
 	    <input type="hidden" name="user_id" value="{{ result.object.pk }}">
 	    <input type="button" class="btn btn-sm btn-default submit" value="Add To">
-	  </div>
-	</form>
+	  </form>
+	</div>
       </div>
-      {% empty %}
-      <p>No results found.</p>
-      {% endfor %}
-      
-      {% if page.has_previous or page.has_next %}
-      <div>
-	{% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-	|
-	{% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-      </div>
-      {% endif %}
-      {% else %}
-      {# Show some example queries to run, maybe query syntax, something else? #}
-      {% endif %}
     </div>
+    {% empty %}
+    <p>No results found.</p>
+    {% endfor %}
+    
+    {% if page.has_previous or page.has_next %}
+    <div>
+      {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+      |
+      {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    {# Show some example queries to run, maybe query syntax, something else? #}
+    {% endif %}
   </div>
-</form>
+</div>
 {% endblock %}
 {% block javascript %}
 <script src="{% static 'web/js/jquery.cookie.js' %}"></script>

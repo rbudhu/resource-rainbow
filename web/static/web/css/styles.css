@@ -21,3 +21,26 @@ footer {
     background-color: #3d3f40;
     padding: 1% 5% 1% 5%;
 }
+
+.lego {
+    border: 1px solid #FFF;
+    min-height: 250px;
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+
+.skill-link {
+      text-decoration:underline;
+      color: #000;
+}     
+
+.avatar {
+    font-size:72px;
+    line-height: 36px;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.grow { transition: all .2s ease-in-out; }
+.grow:hover { transform: scale(1.05); box-shadow: 3px 3px 3px #777; z-index: 1000;}
+

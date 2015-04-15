@@ -1,5 +1,12 @@
 {% extends 'web/base.html' %}
+{% load static %}
 {% load bootstrap3 %}
+{% block style %}
+<style>
+.grow { transition: all .4s ease-in-out; }
+.grow:hover { transform: scale(1.05); box-shadow: 3px 3px 3px #777; z-index:1000; }
+</style>
+{% endblock %}
 {% block content %}
 <div class="row">
   <div class="col-md-12">
@@ -9,18 +16,72 @@
 <div class="row">
   <div class="col-md-12">
     <div class="pull-right">
-      <a href="{% url 'web:user-search' %}?wg={{ workgroup.pk }}" class="btn btn-lg btn-success">Add Friends</a>
+      <a href="{% url 'web:user-search' %}?wg={{ workgroup.pk }}" class="btn btn-lg btn-success">Add People</a>
     </div>
   </div>
 </div>
+<br>
 <div class="row">
   <div class="col-md-12">
     {% for user in workgroup.user_set.all %}
-    <div class="col-md-4 {{ user.latest_status.status.css_class }}" style="height:150px;">
-	<h3>{{ user.first_name }} {{ user.last_name }}</h3>
-	<p>{{ user.latest_status.status.name }}</p>
+    <div id="person-{{ user.pk }}" data-person="{{ user.pk }}" class="col-md-4 lego grow {{ user.latest_status.status.css_class }}">
+      <div class="row">
+	<div class="col-md-12">
+	  <div class="row">
+	    <div class="col-md-8 col-sm-8 col-xs-8">
+	      <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+	      <p>{{ user.latest_status.status.name }}</p>
+	    </div>
+	    <div class="col-md-4 col-sm-4 col-xs-4">
+	      <div class="avatar">
+		{% if user.avatar %}
+		<img src="{{ user.avatar }}" class="img-responsive">
+		{% else %}
+		<i class="glyphicon glyphicon-user"></i>
+		{% endif %}
+	      </div>
+	    </div>
+	  </div>
+	  <div class="small skills">
+	    Skills:
+	    {% for skill in user.skills.all %}
+	    <a href="{% url 'web:user-search' %}?q={{ skill.name }}" class="skill-link">{{ skill.name }}</a>
+	    {% endfor %}
+	  </div>
+	  <br>
+	  <div class="row">
+	    <div class="col-md-12">
+	      <form id="user-form-{{ result.object.pk }}" class="form-inline" method="POST">
+		<input type="hidden" name="group_id" value="{{ workgroup.pk }}">
+		<input type="hidden" name="user_id" value="{{ user.pk }}">
+		<input type="button" class="btn btn-sm btn-default submit" value="Remove">
+	      </form>
+	    </div>
+	  </div>
+	</div>
+      </div>
     </div>
     {% endfor %}
   </div>
 </div>
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'web/js/jquery.cookie.js' %}"></script>
+<script src="{% static 'web/js/resource_rainbow/csrf.js' %}"></script>
+<script>
+$(document).ready(function() {
+$('.submit').click(function() {
+var $form = $(this).closest('form');
+var user = $('[name=user_id]', $form).val();
+var data = $form.serialize();
+$.post('{% url 'web:workgroup-user-remove' %}', data, function(response) {
+console.log(response);
+$('#person-'+user).fadeOut(2000);
+
+});
+
+});
+});
+</script>
+
 {% endblock %}

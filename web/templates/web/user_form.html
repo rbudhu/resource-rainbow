@@ -3,19 +3,36 @@
 {% load bootstrap3 %}
 {% block style %}
 <link rel="stylesheet" href="{% static 'web/css/select2.css' %}">
+<link rel="stylesheet" href="{% static 'web/css/select2-bootstrap.css' %}">
 
 {% endblock %}
 {% block content %}
+{% if message %}
 <div class="row">
-  <div class="col-md-6 col-md-offset-3">
+  <div class="col-md-12">
+    <div class="alert alert-info">
+      <center><h3>{{ message }}</h3></center>
+    </div>
+    </div>
+</div>
+{% endif %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
     <form method="POST">
       {% csrf_token %}
-      {% bootstrap_field form.first_name %}
-      {% bootstrap_field form.last_name %}
-      {% bootstrap_field form.email %}
+      <h4>Your Skills</h4>
+      {% bootstrap_field form.skills %}
+      <h4>Your Info</h4>
+      <p>
+	{% bootstrap_field form.first_name %}
+	{% bootstrap_field form.last_name %}
+	{% bootstrap_field form.email %}
+	{% bootstrap_field form.phone_number %}
+	{% bootstrap_field form.location %}
+      </p>
+      <h4>Optionally Change Your Password</h4>
       {% bootstrap_field form.password1 %}
       {% bootstrap_field form.password2 %}
-      {% bootstrap_field form.skills %}
       {% buttons %}
       <input type="submit" class="btn btn-primary" value="Save">
       {% endbuttons %}

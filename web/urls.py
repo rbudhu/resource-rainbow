@@ -2,6 +2,8 @@ from django.conf.urls import include, url
 from django.contrib.auth.views import login, logout
 from web import views
 
+from resource_rainbow.decorators import login_profile_required
+
 urlpatterns = [
     url(r'^$', views.StatusCreate.as_view(),
         name='status-create'),
@@ -23,4 +25,7 @@ urlpatterns = [
         name='workgroup-detail'),
     url(r'^workgroup/user/add/?$', views.WorkGroupUserAdd.as_view(),
         name='workgroup-user-add'),
+    url(r'^workgroup/user/remove/?$', views.WorkGroupUserRemove.as_view(),
+        name='workgroup-user-remove'),
+
     ]
