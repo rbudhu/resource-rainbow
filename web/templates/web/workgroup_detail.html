@@ -49,9 +49,10 @@
 	    {% endfor %}
 	  </div>
 	  <br>
+	  <span class="small">{% if user.phone_number %}{{ user.phone_number }} | {% endif %} {% if user.location %}{{ user.location }}{% endif %}</span>
 	  <div class="row">
 	    <div class="col-md-12">
-	      <form id="user-form-{{ result.object.pk }}" class="form-inline" method="POST">
+	      <form id="user-form-{{ user.pk }}" class="form-inline" method="POST">
 		<input type="hidden" name="group_id" value="{{ workgroup.pk }}">
 		<input type="hidden" name="user_id" value="{{ user.pk }}">
 		<input type="button" class="btn btn-sm btn-default submit" value="Remove">
