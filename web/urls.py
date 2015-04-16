@@ -2,8 +2,6 @@ from django.conf.urls import include, url
 from django.contrib.auth.views import login, logout
 from web import views
 
-from resource_rainbow.decorators import login_profile_required
-
 urlpatterns = [
     url(r'^$', views.StatusCreate.as_view(),
         name='status-create'),
