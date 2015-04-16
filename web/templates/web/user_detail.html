@@ -1,0 +1,52 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-4 col-sm-4 col-xs-4">
+    <h1>{{ person.last_name }}, {{ person.first_name }}</h1>
+    <h4>{{ person.personname }}</h4>
+  </div>
+  <div class="col-md-3 col-sm-3 col-xs-3">
+    <h1><img src="{{ person.avatar }}"></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Skills</h2>
+    <hr>
+    <ul>
+    {% for skill in person.skills.all %}
+    <li><a href="{% url 'web:user-search' %}?q={{ skill.name }}">{{ skill.name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Contact</h2>
+    <hr>
+    <p>
+      Email: <a href="mailto:{{ person.email }}">{{ person.email }}</a>
+    </p>
+    <p>
+      Phone: <a href="tel:{{ person.phone_number }}">{{ person.phone_number }}</a>
+    </p>
+    <p>
+      Location: {{ person.location }}
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Status History</h2>
+    <hr>
+    {% for status in user_statuses %}
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 {{status.status.css_class}} lego-history">
+      <span style="font-size:10px;">{{ status.created|date:'m/d/Y' }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

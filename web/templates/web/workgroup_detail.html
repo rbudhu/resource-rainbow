@@ -32,7 +32,7 @@
 	<div class="col-md-12">
 	  <div class="row">
 	    <div class="col-md-8 col-sm-8 col-xs-8">
-	      <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+	      <h3><a href="{% url 'web:user-detail' pk=user.pk %}" class="white-text">{{ user.first_name }} {{ user.last_name }}</a></h3>
 	      <p>{{ user.latest_status.status.name }}</p>
 	    </div>
 	    <div class="col-md-4 col-sm-4 col-xs-4">
@@ -72,20 +72,5 @@
 {% block javascript %}
 <script src="{% static 'web/js/jquery.cookie.js' %}"></script>
 <script src="{% static 'web/js/resource_rainbow/csrf.js' %}"></script>
-<script>
-$(document).ready(function() {
-$('.submit').click(function() {
-var $form = $(this).closest('form');
-var user = $('[name=user_id]', $form).val();
-var data = $form.serialize();
-$.post('{% url 'web:workgroup-user-remove' %}', data, function(response) {
-console.log(response);
-$('#person-'+user).fadeOut(2000);
-
-});
-
-});
-});
-</script>
-
+<script src="{% static 'web/js/resource_rainbow/workgroup.js' %}"></script>
 {% endblock %}

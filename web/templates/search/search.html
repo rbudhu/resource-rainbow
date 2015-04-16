@@ -28,7 +28,7 @@
 	<div class="col-md-12">
 	  <div class="row">
 	    <div class="col-md-8 col-sm-8 col-xs-8">
-	      <h3>{{ result.first_name }} {{ result.last_name }}</h3>
+	      <h3><a href="{% url 'web:user-detail' pk=result.pk %}" class="white-text">{{ result.first_name }} {{ result.last_name }}</a></h3>
 	      <p>{{ result.object.latest_status.status.name }}</p>
 	    </div>
 	    <div class="col-md-4 col-sm-4 col-xs-4">
@@ -87,21 +87,5 @@
 <script src="{% static 'web/js/jquery.cookie.js' %}"></script>
 <script src="{% static 'web/js/jquery.color-2.1.2.min.js' %}"></script>
 <script src="{% static 'web/js/resource_rainbow/csrf.js' %}"></script>
-<script>
-$(document).ready(function() {
-    $('.submit').click(function() {
-        var $btn = $(this);
-        var $form = $(this).closest('form');
-        var data = $form.serialize();
-        $.post('{% url 'web:workgroup-user-add' %}', data,
-            function(response) {
-                console.log(response);
-                $btn.animate({'backgroundColor': '#5cb85c'}, 500,
-                             function() {
-                                 $btn.animate({'backgroundColor': 'white'}, 500);
-                              });
-        });
-    });
-});
-</script>
+<script src="{% static 'web/js/resource_rainbow/search.js' %}"></script>
 {% endblock %}

@@ -41,6 +41,24 @@ footer {
     text-align: right;
 }
 
-.grow { transition: all .2s ease-in-out; }
-.grow:hover { transform: scale(1.05); box-shadow: 3px 3px 3px #777; z-index: 1000;}
+.lego-history {
+    border-left: 1px solid #fff;
+    text-align:center;
+}
 
+.grow {
+    transition: all .2s ease-in-out;
+}
+.grow:hover {
+    transform: scale(1.05);
+    box-shadow: 3px 3px 3px #777;
+    z-index: 1000;
+}
+
+.white-text {
+    color: #fff;
+}
+
+.white-text:hover {
+    color: #fff;
+}

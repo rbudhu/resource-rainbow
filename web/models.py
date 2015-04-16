@@ -46,7 +46,7 @@ class WorkGroup(models.Model):
         status_dict = {statuses[k]['user']: statuses[k]['user__userstatus__status'] for k, v in enumerate(statuses)}
         sorted = status_dict.values()
         sorted.sort()
-        status_pk = sorted[len(sorted)/2]
+        status_pk = sorted[len(sorted) / 2]
         try:
             status = Status.objects.get(pk=status_pk)
             return status
@@ -58,7 +58,7 @@ class WorkGroup(models.Model):
         from django.core.urlresolvers import reverse
         return reverse('web:workgroup-detail',
                        kwargs={'pk': self.pk})
-    
+
 
 class Status(models.Model):
     name = models.CharField(max_length=140, unique=True)
@@ -67,18 +67,8 @@ class Status(models.Model):
     active = models.BooleanField(default=True)
 
 
-class Skill(models.Model):
-    name = models.CharField(max_length=140, unique=True)
-    active = models.BooleanField(default=True)
-
-
 class UserStatus(models.Model):
     user = models.ForeignKey(User)
     status = models.ForeignKey(Status)
     description = models.TextField(null=True)
-    created = models.DateTimeField(auto_now=True)
-
-
-class UserSkill(models.Model):
-    user = models.ForeignKey(User)
-    skill = models.ForeignKey(Skill)
+    created = models.DateTimeField(default=timezone.now)

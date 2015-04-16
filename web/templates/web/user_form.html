@@ -40,19 +40,7 @@
   </div>
 </div>
 {% endblock %}
-</script>
-
 {% block javascript %}
 <script src="{% static 'web/js/select2.min.js' %}"></script>
-<script>
-  $(document).ready(function() {
-  $('#id_skills').select2({
-  placeholder: 'Enter a list of skills',
-  tags: true,
-  tokenSeparators: [',']
-  });
-  });
-</script>
+<script src="{% static 'web/js/resource_rainbow/profile.js' %}"></script>
 {% endblock %}
-  </body>
-</html>

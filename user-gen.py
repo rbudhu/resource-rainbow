@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from random import randrange
 
 import requests
@@ -34,9 +35,13 @@ for i in range(0, 10):
                                phone_number=phone_number,
                                location=location.title(),
                                avatar=avatar)
-    
+
     skill_index = randrange(0, len(skills))
-    for skill in skills[skill_index:skill_index+3]:
+    for skill in skills[skill_index:skill_index + 3]:
         user.skills.add(skill)
-    status = Status.objects.get(pk=randrange(1,4))
-    user_status = UserStatus.objects.create(user=user, status=status)
+    # Create a few statuses
+    for i in xrange(1, 10):
+        status = Status.objects.get(pk=randrange(1, 4))
+        date = datetime.now() - timedelta(days=i)
+        user_status = UserStatus.objects.create(user=user, status=status,
+                                                created=date)

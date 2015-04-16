@@ -7,6 +7,11 @@
   </div>
 </div>
 <br>
+<div id="status-message" class="row" style="display:none; text-align:center;">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="alert alert-info"><h4></h4></div>
+  </div>
+</div>
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     {% for status in statuses %}
@@ -21,22 +26,18 @@
     <textarea></textarea>
   </div>
 </div>
+<hr>
+<div class="row">
+  <h3>Status History</h3>
+  {% for status in user_statuses %}
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 {{ status.status.css_class}} lego-history">
+    <span style="font-size:10px;">{{ status.created|date:'d/m/Y' }}</span>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}
 {% block javascript %}
 <script src="{% static 'web/js/jquery.cookie.js' %}"></script>
 <script src="{% static 'web/js/resource_rainbow/csrf.js' %}"></script>
-<script>
-$(document).ready(function() {
-    $('.status-create').click(function() {
-          var status_id = $(this).data('status-id');
-          var user_id = $(this).data('user-id');
-          $.post("{% url 'web:status-create' %}", {
-              'status-id': status_id,
-              'user-id': user_id
-            }, function(data) {
-                   console.log(data);
-               });
-      });
-  });
-</script>
+<script src="{% static 'web/js/resource_rainbow/status.js' %}"></script>
 {% endblock %}
