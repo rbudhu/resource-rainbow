@@ -86,8 +86,8 @@ class StatusCreate(LoginProfileRequiredMixin, View):
         user_statuses = user_statuses.order_by('created')
         return render(request, self.template_name, {
             'statuses': statuses,
-            'work_groups': work_groups,
-            'user_statuses': user_statuses[:6],
+            'work_groups': work_groups[:6],
+            'user_statuses': user_statuses,
         })
 
     def post(self, request):

@@ -1,3 +1,5 @@
+from collections import Counter
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import PermissionsMixin
@@ -42,11 +44,10 @@ class WorkGroup(models.Model):
     def workgroup_status(self):
         statuses = WorkGroup.objects.filter(pk=self.pk)
         statuses = statuses.values('user', 'user__userstatus__status')
-        statuses = statuses.order_by('user__userstatus__created')
+        statuses = statuses.order_by('-user__userstatus__created')
         status_dict = {statuses[k]['user']: statuses[k]['user__userstatus__status'] for k, v in enumerate(statuses)}
-        sorted = status_dict.values()
-        sorted.sort()
-        status_pk = sorted[len(sorted) / 2]
+        data = Counter(status_dict.values())
+        status_pk = data.most_common(1)[0][0]
         try:
             status = Status.objects.get(pk=status_pk)
             return status

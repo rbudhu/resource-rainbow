@@ -31,7 +31,7 @@
   <h3>Status History</h3>
   {% for status in user_statuses %}
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 {{ status.status.css_class}} lego-history">
-    <span style="font-size:10px;">{{ status.created|date:'d/m/Y' }}</span>
+    <span style="font-size:10px;">{{ status.created|date:'m/d/Y' }}</span>
   </div>
   {% endfor %}
 </div>

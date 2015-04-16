@@ -6,7 +6,8 @@
 <div class="row">
   <div class="col-md-4 col-sm-4 col-xs-4">
     <h1>{{ person.last_name }}, {{ person.first_name }}</h1>
-    <h4>{{ person.personname }}</h4>
+    <h4>{{ person.username }}</h4>
+    <h5>Currently: <span class="btn {{ person.latest_status.status.css_class }}">{{ person.latest_status.status.name }}</span></h5>
   </div>
   <div class="col-md-3 col-sm-3 col-xs-3">
     <h1><img src="{{ person.avatar }}"></h1>
