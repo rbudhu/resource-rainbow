@@ -29,7 +29,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-th"></i> WorkGroups <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
 	    {% for work_group in work_groups %}
-	    <li><a href="{% url 'web:workgroup-detail' work_group.pk %}">{{ work_group.name }}</a></li>
+	    <li class="{{ work_group.workgroup_status.css_class }}"><a href="{% url 'web:workgroup-detail' work_group.pk %}">{{ work_group.name }}</a></li>
 	    {% endfor %}
 	  </ul>
 	</li>

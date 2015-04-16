@@ -161,7 +161,8 @@ class StatusCreate(LoginProfileRequiredMixin, View):
             response = {
                 'user': request.user.pk,
                 'status': status.pk,
-                'user_status': user_status.pk
+                'user_status': user_status.pk,
+                'user_status_name': status.name
                 }
             return JsonResponse(response)
         except Status.DoesNotExist:

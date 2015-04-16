@@ -38,6 +38,22 @@ class WorkGroup(models.Model):
     class Meta:
         unique_together = ('name', 'created_by')
 
+    @property
+    def workgroup_status(self):
+        statuses = WorkGroup.objects.filter(pk=self.pk)
+        statuses = statuses.values('user', 'user__userstatus__status')
+        statuses = statuses.order_by('user__userstatus__created')
+        status_dict = {statuses[k]['user']: statuses[k]['user__userstatus__status'] for k, v in enumerate(statuses)}
+        sorted = status_dict.values()
+        sorted.sort()
+        status_pk = sorted[len(sorted)/2]
+        try:
+            status = Status.objects.get(pk=status_pk)
+            return status
+        except Status.DoesNotExist:
+            pass
+        return None
+
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('web:workgroup-detail',

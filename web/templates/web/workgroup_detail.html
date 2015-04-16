@@ -9,9 +9,12 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-5">
     <h1>{{ workgroup.name }}</h1>
-    </div>
+    {% with workgroup_status=workgroup.workgroup_status %}
+    <span class="btn {{ workgroup_status.css_class }}" style="cursor:cursor;">{{ workgroup_status.name }}</span>
+    {% endwith %}
+  </div>
 </div>
 <div class="row">
   <div class="col-md-12">
