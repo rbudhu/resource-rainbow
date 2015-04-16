@@ -22,7 +22,7 @@ from web.forms import UserCreationForm, UserUpdateForm
 
 
 # Create your views here.
-class UserCreate(WorkGroupListMixin, CreateView):
+class UserCreate(CreateView):
     template_name = 'web/create.html'
     form_class = UserCreationForm
     model = User
