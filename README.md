@@ -1,6 +1,8 @@
 # Resource Rainbow
 Resource Rainbow helps visually identify workload issues within your team, office, and company.
 
+![Screenshot](http://i.imgur.com/fUNTDbp.png)
+
 ## Introduction
 
 Resource Rainbow is a self-deployable webapp that allows team leaders to visually identify overworked and underworked staff members.
@@ -11,9 +13,20 @@ and visually identify overworked, underworked, and "just right" employees, organ
 
 In some industries, like the defense industry, employees work on various contracts.  In some cases, employees work on multiple
 contracts and can quickly become overworked.  In other cases, employees are "undercovered" or do not have enough work to fulfill
-their weekly hourly quota.  It isdifficult to ascertain employees who were underworked but had the skillsets that could alleviate
+their weekly hourly quota.  It is sometimes difficult to determine employees who are underworked but have the skillsets to alleviate
 some of the workload from the overworked personnel.  It is also difficult to tell the workload coverage of each member of a team.
 Resource Rainbow was developed to solve these problems.
+
+## Potential Use Case
+
+Have team members update their Resource Rainbow status daily as part of a scrum activity.  Team lead monitors aggregate workgroup workload as well as individual workload to perform task scoping or resource balancing.
+
+## Features
+
+* Search for users by username, name, skillset
+* Create workgroups and add users to workgroups
+* Get aggregated workgroup workload status (i.e. the mode of the statuses of all members of a workgroup)
+* Track user workload status history per day per user
 
 ## Dependencies
 
@@ -24,7 +37,12 @@ Examine the requirements.txt. If you use pip/virtualenv, just pip install -r req
 
 Fork on GitHub: https://github.com/rbudhu/resource-rainbow
 
-You can run tools/user-gen.py to generate random users (make sure to set your DJANGO_SETTINGS_MODULE=resource_rainbow.settings environment variable)
+Generate test user data by:
+
+    export DJANGO_SETTINGS_MODULE=resource_rainbow.settings
+    cp test/user-gen.py ../
+    python user-gen.py
+    
 
 # Building
 
