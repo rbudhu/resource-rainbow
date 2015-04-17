@@ -17,9 +17,10 @@ their weekly hourly quota.  It is sometimes difficult to determine employees who
 some of the workload from the overworked personnel.  It is also difficult to tell the workload coverage of each member of a team.
 Resource Rainbow was developed to solve these problems.
 
-## Potential Use Case
+## Potential Use Cases
 
-Have team members update their Resource Rainbow status daily as part of a scrum activity.  Team lead monitors aggregate workgroup workload as well as individual workload to perform task scoping or resource balancing.
+* Team members update their Resource Rainbow status daily as part of a scrum activity.  Team lead monitors aggregate workgroup workload as well as individual workload to perform task scoping or resource balancing.
+* Team members update their Resource Rainbow status weekly.  The team lead monitors weekly status and tracks aggregate workgroup workload per month and performs historical analysis.
 
 ## Features
 
@@ -48,8 +49,8 @@ Generate test user data by:
 
 *Optional*: If you have virtualenv then create your desired environment.
 
-    pip install -r requirements.txt
     cd resource_rainbow
+    pip install -r requirements.txt
     python manage.py migrate
     python manage.py loaddata web/initial_data.json
 
