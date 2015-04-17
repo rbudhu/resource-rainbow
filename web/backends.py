@@ -23,7 +23,6 @@ class JiveBackend(object):
             person = re.sub('^throw.*;\\s*', '', person)
             try:
                 person = json.loads(person)
-                print(json.dumps(person, indent=2))
                 email, location, phone_number = None, None, None
                 last_name = person['name']['familyName']
                 first_name = person['name']['givenName']
